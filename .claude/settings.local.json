@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sudo chmod -R u=rwX,g=rX,o=rX /var/www/englishICH)",
+      "Bash(sudo chmod -R g+w /var/www/englishICH/storage /var/www/englishICH/bootstrap/cache)",
+      "Bash(git pull *)",
+      "Bash(curl -sk -o /dev/null -w \"%{http_code}\" https://englishclub.hafizbatubara.my.id/admin/teachers)",
+      "Bash(curl -sk -o /dev/null -w \"%{http_code}\" https://englishclub.hafizbatubara.my.id/admin/scheduling)",
+      "Bash(sed -i 's/APP_ENV=production/APP_ENV=local/' /var/www/englishICH/.env)",
+      "Bash(sed -i 's/APP_DEBUG=false/APP_DEBUG=true/' /var/www/englishICH/.env)",
+      "Bash(docker exec *)",
+      "Bash(sed -i 's/APP_ENV=local/APP_ENV=production/' /var/www/englishICH/.env)",
+      "Bash(sed -i 's/APP_DEBUG=true/APP_DEBUG=false/' /var/www/englishICH/.env)",
+      "Bash(docker compose *)",
+      "Bash(curl -sk -o /dev/null -w \"%{http_code}\" https://englishclub.hafizbatubara.my.id/profile/profile_2_1782592058.jpg)"
+    ]
+  }
+}
