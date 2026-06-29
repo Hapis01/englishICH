@@ -1,0 +1,203 @@
+<?php
+
+return [
+    // Navbar
+    'nav' => [
+        'home' => 'Beranda',
+        'about' => 'Tentang',
+        'facilities' => 'Fasilitas',
+        'tutors' => 'Tutor',
+        'pricing' => 'Harga',
+        'testimonials' => 'Testimoni',
+        'faq' => 'FAQ',
+        'join_batch' => 'Daftar Batch 1',
+    ],
+
+    // Hero Section
+    'hero' => [
+        'badge' => '🎉 Grand Launching Batch 1 - Kursi Terbatas',
+        'title' => 'Mulai Perjalanan Bahasa Inggris Anda dengan',
+        'title_highlight' => 'English Club ICH Medan',
+        'description' => 'Bergabunglah dengan generasi pertama English Club ICH Medan dan rasakan pembelajaran bahasa Inggris interaktif dengan metode modern, kelas nyaman, dan mentor yang mendukung.',
+        'countdown_title' => 'Pendaftaran Batch 1 Berakhir Dalam:',
+        'days' => 'Hari',
+        'hours' => 'Jam',
+        'minutes' => 'Menit',
+        'seconds' => 'Detik',
+        'badge_certificate' => '✓ Sertifikat',
+        'badge_live_class' => '✓ Kelas Langsung',
+        'badge_portal' => '✓ Portal Belajar',
+        'trusted_badge' => 'Platform Pembelajaran Terpercaya',
+        'students_count' => '500+',
+        'students_label' => 'Siswa',
+        'certificates_count' => '50+',
+        'certificates_label' => 'Sertifikat',
+        'classes_count' => '20+',
+        'classes_label' => 'Kelas',
+    ],
+
+    // About Section
+    'about' => [
+        'title' => 'Visi &',
+        'title_highlight' => 'Misi Kami',
+        'subtitle' => 'Menciptakan generasi pertama pembelajar bahasa Inggris yang percaya diri di Medan',
+        'vision_title' => 'Visi Kami',
+        'vision_text' => 'Menjadi lembaga bahasa Inggris terkemuka di Medan, memberdayakan individu dengan keterampilan komunikasi kelas dunia yang membuka pintu peluang internasional dan pertumbuhan pribadi.',
+        'mission_title' => 'Misi Kami',
+        'mission_1' => 'Menyediakan pengalaman belajar bahasa Inggris yang interaktif dan menarik',
+        'mission_2' => 'Membangun kepercayaan diri dalam berbicara, menulis, dan memahami bahasa Inggris',
+        'mission_3' => 'Menciptakan komunitas pembelajar dan mentor yang saling mendukung',
+    ],
+
+    // Facilities Section
+    'facilities' => [
+        'title' => 'Mengapa Memilih',
+        'title_highlight' => 'English Club ICH?',
+        'subtitle' => 'Rasakan fasilitas kelas dunia dan lingkungan belajar yang dirancang untuk kesuksesan Anda',
+        'modern_classrooms' => 'Ruang Kelas Modern',
+        'modern_classrooms_desc' => 'Ruangan ber-AC dengan papan pintar dan tempat duduk nyaman untuk pembelajaran optimal',
+        'digital_learning' => 'Akses Pembelajaran Digital',
+        'digital_learning_desc' => 'Akses modul interaktif, materi pembelajaran, dan sumber daya online di mana saja.',
+        'expert_tutors' => 'Tutor Ahli',
+        'expert_tutors_desc' => 'Dibimbing oleh mentor berpengalaman dan instruktur bahasa Inggris dengan metode pengajaran interaktif.',
+        'interactive_learning' => 'Pembelajaran Interaktif',
+        'interactive_learning_desc' => 'Alat multimedia, latihan interaktif, dan pengalaman belajar yang gamified',
+        'flexible_schedule' => 'Jadwal Fleksibel',
+        'flexible_schedule_desc' => 'Kelas pagi, siang, dan malam untuk menyesuaikan gaya hidup Anda yang sibuk',
+        'certified_programs' => 'Program Bersertifikat',
+        'certified_programs_desc' => 'Sertifikat digital diberikan setelah menyelesaikan program pembelajaran.',
+    ],
+
+    // Tutors Section
+    'tutors' => [
+        'title' => 'Tim',
+        'title_highlight' => 'Pembelajaran Kami',
+        'subtitle' => 'Belajar dari pendidik berpengalaman yang berdedikasi untuk penguasaan bahasa Inggris Anda',
+        'tutor_1_name' => 'John Doe',
+        'tutor_1_role' => 'Native Speaker',
+        'tutor_1_desc' => '10+ tahun pengalaman mengajar dengan sertifikasi TESOL',
+        'tutor_2_name' => 'Sarah Anderson',
+        'tutor_2_role' => 'Spesialis IELTS',
+        'tutor_2_desc' => 'Ahli dalam persiapan IELTS dengan skor band 8.5',
+        'tutor_3_name' => 'Michael Park',
+        'tutor_3_role' => 'Business English',
+        'tutor_3_desc' => 'Pelatih korporat dengan latar belakang MBA',
+        'tutor_4_name' => 'Lisa Thompson',
+        'tutor_4_role' => 'Spesialis Anak',
+        'tutor_4_desc' => 'Spesialis mengajar anak usia 6-12 tahun',
+    ],
+
+    // Pricing Section
+    'pricing' => [
+        'title' => 'Harga Spesial',
+        'title_highlight' => 'Batch 1',
+        'subtitle' => 'Harga pembukaan spesial untuk generasi pertama siswa English Club ICH Medan.',
+        'basic_title' => 'Basic',
+        'basic_subtitle' => 'Sempurna untuk pemula',
+        'basic_duration' => 'per 3 bulan',
+        'basic_feature_1' => '12 sesi langsung',
+        'basic_feature_2' => 'Materi pembelajaran dasar',
+        'basic_feature_3' => 'Sertifikat penyelesaian',
+        'basic_feature_4' => 'Dukungan email',
+        'basic_cta' => 'Pilih Basic',
+        'premium_title' => 'Intermediate',
+        'premium_badge' => '⭐ Paling Populer',
+        'premium_subtitle' => 'Nilai terbaik untuk pembelajar serius',
+        'premium_duration' => 'per 3 bulan',
+        'premium_feature_1' => '24 sesi langsung',
+        'premium_feature_2' => 'Materi pembelajaran lengkap',
+        'premium_feature_3' => 'Sertifikat penyelesaian',
+        'premium_feature_4' => 'Dukungan prioritas',
+        'premium_feature_5' => 'Akses ke portal pembelajaran',
+        'premium_feature_6' => 'Laporan kemajuan bulanan',
+        'premium_cta' => 'Pilih Intermediate',
+        'vip_title' => 'Advanced',
+        'vip_subtitle' => 'Pengalaman belajar terbaik',
+        'vip_duration' => 'per 3 bulan',
+        'vip_feature_1' => '36 sesi langsung',
+        'vip_feature_2' => 'Materi pembelajaran advanced',
+        'vip_feature_3' => 'Sertifikat penyelesaian',
+        'vip_feature_4' => 'Dukungan prioritas 24/7',
+        'vip_feature_5' => 'Akses portal penuh',
+        'vip_feature_6' => 'Laporan kemajuan mingguan',
+        'vip_feature_7' => 'Sesi mentoring 1-on-1',
+        'vip_feature_8' => 'Workshop eksklusif',
+        'vip_cta' => 'Pilih Advanced',
+        'early_bird_title' => '🎁 Bonus Early Bird',
+        'early_bird_desc' => 'Daftar sebelum 1 Juni dan dapatkan GRATIS Tes Penempatan Bahasa Inggris & E-Modul Eksklusif (senilai Rp 500.000)',
+        'early_bird_cta' => 'Klaim Bonus Anda Sekarang',
+        'suitable_for' => 'Cocok Untuk',
+        'basic_suitable' => 'Pemula & Pembelajar Santai',
+        'premium_suitable' => 'Pembelajar Intermediate & Profesional',
+        'vip_suitable' => 'Pembelajar Advanced & Fokus Karir',
+        'duration_label' => 'Durasi',
+        'duration_value' => '3 Bulan',
+        'capacity_label' => 'Kapasitas Kelas',
+        'capacity_value' => 'Maks 15 Siswa',
+    ],
+
+    // Testimonials Section
+    'testimonials' => [
+        'title' => 'Apa Kata',
+        'title_highlight' => 'Siswa Kami',
+        'subtitle' => 'Pengalaman nyata dari komunitas pembelajaran kami',
+        'student_1_name' => 'Rina Wijaya',
+        'student_1_program' => 'Program Premium',
+        'student_1_review' => 'English Club ICH mengubah hidup saya! Tutornya luar biasa dan metode pembelajarannya sangat efektif. Sekarang saya bisa berbicara bahasa Inggris dengan percaya diri.',
+        'student_2_name' => 'Budi Santoso',
+        'student_2_program' => 'Program VIP',
+        'student_2_review' => 'Investasi terbaik untuk karir saya. Sesi mentoring 1-on-1 membantu saya mempersiapkan wawancara kerja di luar negeri. Sangat direkomendasikan!',
+        'student_3_name' => 'Siti Nurhaliza',
+        'student_3_program' => 'Program Basic',
+        'student_3_review' => 'Sebagai pemula, saya gugup pada awalnya. Tapi lingkungan yang mendukung dan tutor yang sabar membuat belajar bahasa Inggris menjadi menyenangkan dan mudah!',
+    ],
+
+    // FAQ Section
+    'faq' => [
+        'title' => 'Pertanyaan yang',
+        'title_highlight' => 'Sering Diajukan',
+        'subtitle' => 'Semua yang perlu Anda ketahui tentang English Club ICH Medan',
+        'q1' => 'Apa itu English Club ICH Medan?',
+        'a1' => 'English Club ICH Medan adalah lembaga pembelajaran bahasa Inggris modern yang menawarkan kelas interaktif dengan tutor berpengalaman, portal pembelajaran digital, dan program bersertifikat untuk semua level.',
+        'q2' => 'Apakah saya akan mendapat sertifikat?',
+        'a2' => 'Ya! Semua siswa yang menyelesaikan program mereka akan menerima sertifikat digital penyelesaian yang dapat digunakan untuk tujuan akademik atau profesional.',
+        'q3' => 'Bagaimana sistem pembelajarannya?',
+        'a3' => 'Kami menggunakan pendekatan blended learning yang menggabungkan kelas interaktif langsung, materi pembelajaran digital, latihan praktis, dan penilaian berkelanjutan untuk memastikan pembelajaran yang efektif.',
+        'q4' => 'Apakah ada kelas online?',
+        'a4' => 'Ya, kami menawarkan kelas offline di lokasi Medan kami dan kelas online melalui portal pembelajaran kami untuk fleksibilitas maksimal.',
+        'q5' => 'Berapa lama durasi belajarnya?',
+        'a5' => 'Program kami berjalan selama 3 bulan dengan frekuensi sesi yang berbeda tergantung paket yang Anda pilih (Basic: 12 sesi, Premium: 24 sesi, VIP: 36 sesi).',
+    ],
+
+    // CTA Section
+    'cta' => [
+        'title' => 'Mulai Perjalanan Bahasa Inggris Anda Hari Ini',
+        'subtitle' => 'Bergabunglah dengan ratusan siswa yang telah mengubah kemampuan bahasa Inggris mereka bersama kami',
+        'button_register' => 'Daftar Sekarang',
+        'button_contact' => 'Hubungi Kami',
+    ],
+
+    // Footer
+    'footer' => [
+        'description' => 'Memberdayakan Medan dengan pendidikan bahasa Inggris kelas dunia. Bergabunglah dengan komunitas kami dan buka potensi Anda.',
+        'quick_links' => 'Tautan Cepat',
+        'contact_us' => 'Hubungi Kami',
+        'address' => 'Jl. Contoh No. 123, Medan',
+        'phone' => '+62 812-3456-7890',
+        'email' => 'info@englishclubiched.com',
+        'copyright' => '© 2026 English Club ICH Medan. Hak cipta dilindungi.',
+    ],
+
+    // WhatsApp
+    'whatsapp' => [
+        'need_help' => 'Butuh Bantuan?',
+        'chat_with_us' => 'Chat dengan Kami',
+    ],
+
+    // Ad Modal
+    'ad_modal' => [
+        'title' => 'Pendaftaran Batch 1 Dibuka',
+        'subtitle' => 'Kursi Terbatas',
+        'cta' => 'Daftar Sekarang',
+    ],
+];

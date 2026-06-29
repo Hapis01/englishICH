@@ -1,0 +1,203 @@
+<?php
+
+return [
+    // Navbar
+    'nav' => [
+        'home' => 'Home',
+        'about' => 'About',
+        'facilities' => 'Facilities',
+        'tutors' => 'Tutors',
+        'pricing' => 'Pricing',
+        'testimonials' => 'Testimonials',
+        'faq' => 'FAQ',
+        'join_batch' => 'Join Batch 1',
+    ],
+
+    // Hero Section
+    'hero' => [
+        'badge' => '🎉 Grand Launching Batch 1 - Limited Seats',
+        'title' => 'Start Your English Journey with',
+        'title_highlight' => 'English Club ICH Medan',
+        'description' => 'Join the first generation of English Club ICH Medan and experience interactive English learning with modern methods, comfortable classes, and supportive mentors.',
+        'countdown_title' => 'Batch 1 Registration Ends In:',
+        'days' => 'Days',
+        'hours' => 'Hours',
+        'minutes' => 'Minutes',
+        'seconds' => 'Seconds',
+        'badge_certificate' => '✓ Certificate',
+        'badge_live_class' => '✓ Live Class',
+        'badge_portal' => '✓ Learning Portal',
+        'trusted_badge' => 'Trusted Learning Platform',
+        'students_count' => '500+',
+        'students_label' => 'Students',
+        'certificates_count' => '50+',
+        'certificates_label' => 'Certificates',
+        'classes_count' => '20+',
+        'classes_label' => 'Classes',
+    ],
+
+    // About Section
+    'about' => [
+        'title' => 'Our',
+        'title_highlight' => 'Vision & Mission',
+        'subtitle' => 'Creating the first generation of confident English learners in Medan',
+        'vision_title' => 'Our Vision',
+        'vision_text' => 'To become the leading English language institution in Medan, empowering individuals with world-class communication skills that open doors to international opportunities and personal growth.',
+        'mission_title' => 'Our Mission',
+        'mission_1' => 'Provide interactive and engaging English learning experiences',
+        'mission_2' => 'Build confidence in speaking, writing, and understanding English',
+        'mission_3' => 'Create a supportive community of learners and mentors',
+    ],
+
+    // Facilities Section
+    'facilities' => [
+        'title' => 'Why Choose',
+        'title_highlight' => 'English Club ICH?',
+        'subtitle' => 'Experience world-class facilities and learning environment designed for your success',
+        'modern_classrooms' => 'Modern Classrooms',
+        'modern_classrooms_desc' => 'Air-conditioned rooms with smart boards and comfortable seating for optimal learning',
+        'digital_learning' => 'Digital Learning Access',
+        'digital_learning_desc' => 'Access interactive modules, learning materials, and online resources anywhere.',
+        'expert_tutors' => 'Expert Tutors',
+        'expert_tutors_desc' => 'Guided by passionate mentors and English instructors with interactive teaching methods.',
+        'interactive_learning' => 'Interactive Learning',
+        'interactive_learning_desc' => 'Multimedia tools, interactive exercises, and gamified learning experiences',
+        'flexible_schedule' => 'Flexible Schedule',
+        'flexible_schedule_desc' => 'Morning, afternoon, and evening classes to fit your busy lifestyle',
+        'certified_programs' => 'Certified Programs',
+        'certified_programs_desc' => 'Digital certificates provided after completing the learning program.',
+    ],
+
+    // Tutors Section
+    'tutors' => [
+        'title' => 'Our',
+        'title_highlight' => 'Learning Team',
+        'subtitle' => 'Learn from passionate educators dedicated to your English mastery',
+        'tutor_1_name' => 'John Doe',
+        'tutor_1_role' => 'Native Speaker',
+        'tutor_1_desc' => '10+ years teaching experience with TESOL certification',
+        'tutor_2_name' => 'Sarah Anderson',
+        'tutor_2_role' => 'IELTS Specialist',
+        'tutor_2_desc' => 'Expert in IELTS preparation with 8.5 band score',
+        'tutor_3_name' => 'Michael Park',
+        'tutor_3_role' => 'Business English',
+        'tutor_3_desc' => 'Corporate trainer with MBA background',
+        'tutor_4_name' => 'Lisa Thompson',
+        'tutor_4_role' => 'Kids Specialist',
+        'tutor_4_desc' => 'Specialized in teaching children aged 6-12',
+    ],
+
+    // Pricing Section
+    'pricing' => [
+        'title' => 'Batch 1',
+        'title_highlight' => 'Special Pricing',
+        'subtitle' => 'Special opening prices for the first generation of English Club ICH Medan students.',
+        'basic_title' => 'Basic',
+        'basic_subtitle' => 'Perfect for beginners',
+        'basic_duration' => 'per 3 months',
+        'basic_feature_1' => '12 live sessions',
+        'basic_feature_2' => 'Basic learning materials',
+        'basic_feature_3' => 'Certificate of completion',
+        'basic_feature_4' => 'Email support',
+        'basic_cta' => 'Choose Basic',
+        'premium_title' => 'Intermediate',
+        'premium_badge' => '⭐ Most Popular',
+        'premium_subtitle' => 'Best value for serious learners',
+        'premium_duration' => 'per 3 months',
+        'premium_feature_1' => '24 live sessions',
+        'premium_feature_2' => 'Complete learning materials',
+        'premium_feature_3' => 'Certificate of completion',
+        'premium_feature_4' => 'Priority support',
+        'premium_feature_5' => 'Access to learning portal',
+        'premium_feature_6' => 'Monthly progress report',
+        'premium_cta' => 'Choose Intermediate',
+        'vip_title' => 'Advanced',
+        'vip_subtitle' => 'Ultimate learning experience',
+        'vip_duration' => 'per 3 months',
+        'vip_feature_1' => '36 live sessions',
+        'vip_feature_2' => 'Advanced learning materials',
+        'vip_feature_3' => 'Certificate of completion',
+        'vip_feature_4' => '24/7 priority support',
+        'vip_feature_5' => 'Full portal access',
+        'vip_feature_6' => 'Weekly progress report',
+        'vip_feature_7' => '1-on-1 mentoring sessions',
+        'vip_feature_8' => 'Exclusive workshops',
+        'vip_cta' => 'Choose Advanced',
+        'early_bird_title' => '🎁 Early Bird Bonus',
+        'early_bird_desc' => 'Register before June 1st and get FREE English Placement Test & Exclusive E-Module (worth Rp 500,000)',
+        'early_bird_cta' => 'Claim Your Bonus Now',
+        'suitable_for' => 'Suitable For',
+        'basic_suitable' => 'Beginners & Casual Learners',
+        'premium_suitable' => 'Intermediate Learners & Professionals',
+        'vip_suitable' => 'Advanced Learners & Career Focus',
+        'duration_label' => 'Duration',
+        'duration_value' => '3 Months',
+        'capacity_label' => 'Class Capacity',
+        'capacity_value' => 'Max 15 Students',
+    ],
+
+    // Testimonials Section
+    'testimonials' => [
+        'title' => 'What Our',
+        'title_highlight' => 'Students Say',
+        'subtitle' => 'Real experiences from our learning community',
+        'student_1_name' => 'Rina Wijaya',
+        'student_1_program' => 'Premium Program',
+        'student_1_review' => 'English Club ICH changed my life! The tutors are amazing and the learning method is very effective. I can now speak English confidently.',
+        'student_2_name' => 'Budi Santoso',
+        'student_2_program' => 'VIP Program',
+        'student_2_review' => 'Best investment for my career. The 1-on-1 mentoring sessions helped me prepare for my job interview abroad. Highly recommended!',
+        'student_3_name' => 'Siti Nurhaliza',
+        'student_3_program' => 'Basic Program',
+        'student_3_review' => 'As a beginner, I was nervous at first. But the supportive environment and patient tutors made learning English fun and easy!',
+    ],
+
+    // FAQ Section
+    'faq' => [
+        'title' => 'Frequently Asked',
+        'title_highlight' => 'Questions',
+        'subtitle' => 'Everything you need to know about English Club ICH Medan',
+        'q1' => 'What is English Club ICH Medan?',
+        'a1' => 'English Club ICH Medan is a modern English language learning institution offering interactive classes with experienced tutors, digital learning portal, and certified programs for all levels.',
+        'q2' => 'Will I receive a certificate?',
+        'a2' => 'Yes! All students who complete their program will receive a digital certificate of completion that can be used for academic or professional purposes.',
+        'q3' => 'How is the learning system?',
+        'a3' => 'We use a blended learning approach combining live interactive classes, digital learning materials, practical exercises, and continuous assessment to ensure effective learning.',
+        'q4' => 'Are there online classes available?',
+        'a4' => 'Yes, we offer both offline classes at our Medan location and online classes via our learning portal for maximum flexibility.',
+        'q5' => 'How long is the learning duration?',
+        'a5' => 'Our programs run for 3 months with different session frequencies depending on your chosen package (Basic: 12 sessions, Premium: 24 sessions, VIP: 36 sessions).',
+    ],
+
+    // CTA Section
+    'cta' => [
+        'title' => 'Start Your English Journey Today',
+        'subtitle' => 'Join hundreds of students who have transformed their English skills with us',
+        'button_register' => 'Register Now',
+        'button_contact' => 'Contact Us',
+    ],
+
+    // Footer
+    'footer' => [
+        'description' => 'Empowering Medan with world-class English education. Join our community and unlock your potential.',
+        'quick_links' => 'Quick Links',
+        'contact_us' => 'Contact Us',
+        'address' => 'Jl. Example Street No. 123, Medan',
+        'phone' => '+62 812-3456-7890',
+        'email' => 'info@englishclubiched.com',
+        'copyright' => '© 2026 English Club ICH Medan. All rights reserved.',
+    ],
+
+    // WhatsApp
+    'whatsapp' => [
+        'need_help' => 'Need Help?',
+        'chat_with_us' => 'Chat with Us',
+    ],
+
+    // Ad Modal
+    'ad_modal' => [
+        'title' => 'Batch 1 Registration Open',
+        'subtitle' => 'Limited Seats Available',
+        'cta' => 'Register Now',
+    ],
+];

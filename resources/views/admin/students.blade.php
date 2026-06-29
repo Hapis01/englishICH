@@ -1,0 +1,574 @@
+@extends('layouts.admin')
+
+@section('title', 'Students Management')
+
+@section('page-title', 'Students')
+
+@section('page-subtitle', 'Manage all registered students')
+
+@section('content')
+    <!-- Page Header with Actions -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+            <!-- Search Bar -->
+            <div class="flex-1 max-w-md">
+                <div class="relative">
+                    <input type="text" id="searchInput" name="search" value="{{ request('search') }}" placeholder="Search by name, email, or phone..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent" onkeyup="if(event.key === 'Enter') performSearch()">
+                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex items-center space-x-3">
+                <select id="statusFilter" name="status" onchange="performSearch()" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent">
+                    <option value="">All Status</option>
+                    <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                    <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                </select>
+                @if(Auth::user()->role !== 'owner')
+                <button 
+    onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'add-student' }))"
+    class="px-4 py-2 bg-[#0B4637] text-white rounded-lg hover:bg-[#10B981] transition font-medium">
+    Add Student
+</button>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <!-- Students Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Student</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Contact</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Total Payments</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Joined Date</th>
+                        @if(Auth::user()->role !== 'owner')
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                        @else
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Logs</th>
+                        @endif
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    @forelse($students as $student)
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-3">
+                                    @if($student->profile_photo)
+                                        <img src="{{ asset($student->profile_photo) }}" alt="{{ $student->name }}" class="w-10 h-10 rounded-full object-cover">
+                                    @else
+                                        <div class="w-10 h-10 bg-[#10B981] rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                            {{ substr($student->name, 0, 1) }}
+                                        </div>
+                                    @endif
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-900">{{ $student->name }}</p>
+                                        <p class="text-xs text-gray-500">ID: #{{ str_pad($student->id, 4, '0', STR_PAD_LEFT) }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <p class="text-sm text-gray-900">{{ $student->email }}</p>
+                                <p class="text-xs text-gray-500">{{ $student->whatsapp ?? $student->phone ?? 'N/A' }}</p>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <p class="text-sm font-bold text-gray-900">Rp {{ number_format($student->payments->where('payment_status', 'paid')->sum('amount'), 0, ',', '.') }}</p>
+                                <p class="text-xs text-gray-500">{{ $student->payments->count() }} transactions</p>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium
+                                    {{ $student->student_status === 'ACTIVE' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700' }}">
+                                    {{ str_replace('_', ' ', $student->student_status ?? 'N/A') }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <p class="text-sm text-gray-900">{{ $student->created_at->format('d M Y') }}</p>
+                                <p class="text-xs text-gray-500">{{ $student->created_at->diffForHumans() }}</p>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    @if(Auth::user()->role !== 'owner')
+                                    <button onclick='openEditStudent(
+    @json($student->id),
+    @json($student->name),
+    @json($student->email),
+    @json($student->phone),
+    @json($student->whatsapp),
+    @json($student->status ?? "active"),
+    @json($student->student_status ?? "ACTIVE")
+)' class="p-1 text-green-600 hover:bg-green-50 rounded transition" title="Edit">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                    </button>
+                                    <button onclick="openDeleteStudent({{ $student->id }}, '{{ $student->name }}')" class="p-1 text-red-600 hover:bg-red-50 rounded transition" title="Delete">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                    </button>
+                                    @endif
+                                    <button onclick="openUserLogs({{ $student->id }}, '{{ $student->name }}')" class="p-1 text-blue-600 hover:bg-blue-50 rounded transition" title="Activity Logs">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="px-6 py-12 text-center">
+                                <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                </svg>
+                                <p class="text-sm text-gray-500">No students found</p>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        @if($students->hasPages())
+            <div class="px-6 py-4 border-t border-gray-200">
+                {{ $students->links() }}
+            </div>
+        @endif
+    </div>
+
+    <!-- Add Student Modal -->
+    <div x-data="{ open: false }" @open-modal.window="if ($event.detail === 'add-student') open = true" @close-modal.window="if ($event.detail === 'add-student') open = false" x-show="open" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+            <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="relative bg-white rounded-lg shadow-xl max-w-2xl w-full">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900">Add New Student</h3>
+                </div>
+
+                <form id="addStudentForm" class="px-6 py-4 space-y-4">
+                    @csrf
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                            <input type="text" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent" placeholder="Enter full name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                            <input type="email" name="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent" placeholder="student@example.com">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">WhatsApp Number</label>
+                            <input type="tel" name="whatsapp" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent" placeholder="+62 812-3456-7890">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                            <input type="password" name="password" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent" placeholder="Minimum 8 characters">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                            <select name="status" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                    <button type="button" @click="open = false" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+                    <button type="button" onclick="submitStudent('add')" class="px-4 py-2 bg-[#0B4637] text-white rounded-lg hover:bg-[#10B981] transition">Add Student</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Student Modal -->
+    <div x-data="{ open: false }" @open-modal.window="if ($event.detail === 'edit-student') open = true" @close-modal.window="if ($event.detail === 'edit-student') open = false" x-show="open" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+            <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="relative bg-white rounded-lg shadow-xl max-w-2xl w-full">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900">Edit Student</h3>
+                </div>
+
+                <form id="editStudentForm" class="px-6 py-4 space-y-4">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="student_id" id="edit_student_id">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                            <input type="text" name="name" id="edit_name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                            <input type="email" name="email" id="edit_email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">WhatsApp Number</label>
+                            <input type="tel" name="whatsapp" id="edit_whatsapp" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Password (leave blank to keep current)</label>
+                            <input type="password" name="password" id="edit_password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent" placeholder="Leave blank to keep current">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Account Status</label>
+                            <select name="status" id="edit_status" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Student Status</label>
+                            <select name="student_status" id="edit_student_status" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent">
+                                <option value="CLASS_NOT_SELECTED">Class Not Selected</option>
+                                <option value="AWAITING_PAYMENT">Awaiting Payment</option>
+                                <option value="PAYMENT_VERIFICATION">Payment Verification</option>
+                                <option value="ACTIVE">Active</option>
+                                <option value="PAYMENT_OVERDUE">Payment Overdue</option>
+                                <option value="SUSPENDED">Suspended</option>
+                                <option value="INACTIVE">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                    <button type="button" @click="open = false" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+                    <button type="button" onclick="submitStudent('edit')" class="px-4 py-2 bg-[#0B4637] text-white rounded-lg hover:bg-[#10B981] transition">Update Student</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Logs Modal -->
+    <div x-data="{ open: false }" @open-modal.window="if ($event.detail === 'user-logs') open = true" @close-modal.window="if ($event.detail === 'user-logs') open = false" x-show="open" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+            <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="relative bg-white rounded-lg shadow-xl max-w-3xl w-full">
+                <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-gray-900">Activity Logs: <span id="logsUserName" class="text-[#0B4637]"></span></h3>
+                    <button type="button" @click="open = false" class="text-gray-400 hover:text-gray-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+
+                <div class="px-6 py-4 max-h-[60vh] overflow-y-auto">
+                    <div id="logsLoading" class="text-center py-4">
+                        <svg class="animate-spin h-8 w-8 text-[#10B981] mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
+                    <div id="logsContent" class="hidden">
+                        <div class="flow-root">
+                            <ul id="logsList" class="-mb-8">
+                                <!-- Logs will be injected here -->
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="logsEmpty" class="hidden text-center py-8 text-gray-500">
+                        No activity logs found for this user.
+                    </div>
+                </div>
+
+                <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
+                    <button type="button" @click="open = false" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function performSearch() {
+            const search = document.getElementById('searchInput').value;
+            const status = document.getElementById('statusFilter').value;
+            
+            const params = new URLSearchParams();
+            
+            if (search) {
+                params.set('search', search);
+            }
+            
+            if (status) {
+                params.set('status', status);
+            }
+            
+            window.location.href = '/admin/students' + (params.toString() ? '?' + params.toString() : '');
+        }
+
+        function openEditStudent(
+    id,
+    name,
+    email,
+    phone,
+    whatsapp,
+    status,
+    student_status
+) {
+
+    document.getElementById('edit_student_id').value = id;
+
+    document.getElementById('edit_name').value = name;
+
+    document.getElementById('edit_email').value = email;
+
+    document.getElementById('edit_whatsapp').value = whatsapp || '';
+
+    document.getElementById('edit_status').value = status;
+    
+    document.getElementById('edit_student_status').value = student_status;
+
+    window.dispatchEvent(
+        new CustomEvent('open-modal', {
+            detail: 'edit-student'
+        })
+    );
+}
+
+        function openDeleteStudent(id, name) {
+            Swal.fire({
+                title: 'Delete Student?',
+                html: `Are you sure you want to delete student <strong>${name}</strong>?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteStudent(id);
+                }
+            });
+        }
+
+        function submitStudent(mode) {
+
+    const form = mode === 'add'
+        ? document.getElementById('addStudentForm')
+        : document.getElementById('editStudentForm');
+
+    const formData = new FormData(form);
+
+    let url = '/admin/students';
+
+    if (mode === 'edit') {
+
+        const id = document.getElementById('edit_student_id').value;
+
+        url = '/admin/students/' + id;
+
+        // FIX LARAVEL
+        formData.append('_method', 'PUT');
+    }
+
+    Swal.fire({
+        title: 'Processing...',
+        text: mode === 'add'
+            ? 'Adding student'
+            : 'Updating student',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    fetch(url, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        }
+    })
+    .then(async response => {
+
+        const data = await response.json();
+
+        if (!response.ok) {
+
+            let errorMessage = data.message || 'Validation failed';
+
+            if (data.errors) {
+
+                errorMessage = Object.values(data.errors)
+                    .flat()
+                    .join('\n');
+            }
+
+            throw new Error(errorMessage);
+        }
+
+        return data;
+    })
+    .then(data => {
+
+        Swal.fire({
+            icon: 'success',
+            title: mode === 'add'
+                ? 'Student Added!'
+                : 'Student Updated!',
+            text: data.message,
+            timer: 2000,
+            showConfirmButton: false
+        });
+
+        setTimeout(() => {
+            window.location.reload();
+        }, 1500);
+
+    })
+    .catch(error => {
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Validation Failed',
+            text: error.message
+        });
+
+        console.error(error);
+
+    });
+}
+
+        function deleteStudent(id) {
+
+    Swal.fire({
+        title: 'Delete Student?',
+        text: 'This action cannot be undone',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Delete'
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            const formData = new FormData();
+
+            formData.append('_method', 'DELETE');
+
+            fetch('/admin/students/' + id, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+
+                if (data.success) {
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Deleted',
+                        text: data.message,
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+
+                }
+
+            });
+
+        }
+
+    });
+
+}
+    
+    function openUserLogs(id, name) {
+        document.getElementById('logsUserName').textContent = name;
+        document.getElementById('logsLoading').classList.remove('hidden');
+        document.getElementById('logsContent').classList.add('hidden');
+        document.getElementById('logsEmpty').classList.add('hidden');
+        
+        window.dispatchEvent(new CustomEvent('open-modal', { detail: 'user-logs' }));
+        
+        fetch('/admin/users/' + id + '/logs', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('logsLoading').classList.add('hidden');
+            if (data.success && data.logs.length > 0) {
+                const logsList = document.getElementById('logsList');
+                logsList.innerHTML = '';
+                
+                data.logs.forEach((log, index) => {
+                    const isLast = index === data.logs.length - 1;
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <div class="relative pb-8">
+                            ${!isLast ? '<span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>' : ''}
+                            <div class="relative flex space-x-3">
+                                <div>
+                                    <span class="h-8 w-8 rounded-full bg-[#10B981] flex items-center justify-center ring-8 ring-white">
+                                        <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    </span>
+                                </div>
+                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                    <div>
+                                        <p class="text-sm text-gray-500">
+                                            <span class="font-medium text-gray-900">${log.action}</span> - ${log.description}
+                                        </p>
+                                    </div>
+                                    <div class="text-right text-sm whitespace-nowrap text-gray-500">
+                                        <time datetime="${log.created_at}">${log.created_at_human}</time>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    logsList.appendChild(li);
+                });
+                document.getElementById('logsContent').classList.remove('hidden');
+            } else {
+                document.getElementById('logsEmpty').classList.remove('hidden');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching logs:', error);
+            document.getElementById('logsLoading').classList.add('hidden');
+            document.getElementById('logsEmpty').classList.remove('hidden');
+        });
+    }
+    </script>
+@endsection
