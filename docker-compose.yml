@@ -39,6 +39,7 @@ services:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       - storage_app:/app-storage:ro                   # untuk URL /storage/
       - public_uploads:/var/www/html/public/images    # user uploads ke public/images
+      - ./public/profile:/var/www/html/public/profile:ro  # foto profil user
     depends_on:
       - app
     networks:
