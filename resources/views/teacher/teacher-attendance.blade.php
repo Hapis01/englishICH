@@ -52,13 +52,19 @@
                                 </form>
                             </div>
                         @else
-                            <form action="{{ route('teacher.teacher-attendance.checkin') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="setting_id" value="{{ $schedule->id }}">
-                                <button type="submit" class="w-full px-4 py-2 bg-[#10B981] text-white rounded-lg hover:bg-[#0B4637] transition text-sm font-medium">
-                                    Check In
+                            @if(now()->format('H:i') < date('H:i', strtotime($schedule->start_time)))
+                                <button type="button" disabled class="w-full px-4 py-2 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed text-sm font-medium">
+                                    Coming Soon
                                 </button>
-                            </form>
+                            @else
+                                <form action="{{ route('teacher.teacher-attendance.checkin') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="setting_id" value="{{ $schedule->id }}">
+                                    <button type="submit" class="w-full px-4 py-2 bg-[#10B981] text-white rounded-lg hover:bg-[#0B4637] transition text-sm font-medium">
+                                        Check In
+                                    </button>
+                                </form>
+                            @endif
                         @endif
                     </div>
                 @endforeach

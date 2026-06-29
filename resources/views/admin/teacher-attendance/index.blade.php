@@ -31,6 +31,61 @@
         </div>
     </div>
 
+    <!-- Today's Schedule & Status -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Today's Schedule & Status - {{ now()->format('l, F d, Y') }}</h3>
+        
+        @if($todaySchedules->count() > 0)
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Teacher</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Class</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Time Window</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @foreach($todaySchedules as $schedule)
+                            @php
+                                $todayRecord = $todayAttendances->where('class_id', $schedule->id)->first();
+                                $hasStarted = now()->format('H:i') >= date('H:i', strtotime($schedule->start_time));
+                            @endphp
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ $schedule->teacher->name }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-900">{{ $schedule->schoolClass->name }}</td>
+                                <td class="px-4 py-3 text-sm text-center text-gray-900">{{ date('H:i', strtotime($schedule->start_time)) }} - {{ date('H:i', strtotime($schedule->end_time)) }}</td>
+                                <td class="px-4 py-3 text-center">
+                                    @if($todayRecord)
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full
+                                            @if($todayRecord->teacher_attendance_status === 'Present') bg-green-100 text-green-800
+                                            @elseif($todayRecord->teacher_attendance_status === 'Late') bg-yellow-100 text-yellow-800
+                                            @else bg-red-100 text-red-800 @endif">
+                                            {{ $todayRecord->teacher_attendance_status }}
+                                        </span>
+                                    @elseif(!$hasStarted)
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                                            Coming Soon
+                                        </span>
+                                    @else
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">
+                                            Pending
+                                        </span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="text-center py-6 text-gray-500">
+                No classes scheduled for today.
+            </div>
+        @endif
+    </div>
+
     <!-- Schedule Management -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div class="flex items-center justify-between mb-4">

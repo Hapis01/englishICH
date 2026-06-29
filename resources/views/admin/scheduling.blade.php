@@ -64,7 +64,12 @@
                                     </div>
                                     <div>
                                         <p class="text-sm font-semibold text-gray-900">{{ $class->name }}</p>
-                                        <p class="text-xs text-gray-500">{{ $class->course->name ?? 'N/A' }} - {{ ucfirst($class->course->level ?? 'N/A') }}</p>
+                                        <p class="text-xs text-gray-500">
+                                            {{ $class->course->name ?? 'N/A' }} - {{ ucfirst($class->course->level ?? 'N/A') }}
+                                            <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $class->learning_method === 'online' ? 'bg-blue-100 text-blue-800' : 'bg-orange-100 text-orange-800' }}">
+                                                {{ ucfirst($class->learning_method ?? 'offline') }}
+                                            </span>
+                                        </p>
                                     </div>
                                 </div>
                             </td>
@@ -128,7 +133,8 @@
     @json($class->max_students),
     @json($class->start_date?->format("Y-m-d")),
     @json($class->end_date?->format("Y-m-d")),
-    @json($class->status)
+    @json($class->status),
+    @json($class->learning_method)
 )'>
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -180,7 +186,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Course</label>
-                            <select name="course_id" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent">
+                            <select name="course_id" id="add_course_id" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent" onchange="updateClassNames('add')">
                                 <option value="">Select Course</option>
                                 @foreach($courses as $course)
                                     <option value="{{ $course->id }}">{{ $course->name }}</option>
@@ -198,14 +204,45 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Class Name</label>
-                        <input type="text" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent" placeholder="e.g., Basic English - Morning Class">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Class Name</label>
+                            <select name="name" id="add_name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent">
+                                <option value="">Select Course First</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Learning Method</label>
+                            <select name="learning_method" id="add_learning_method" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent">
+                                <option value="">Select Method</option>
+                                <option value="offline">Offline</option>
+                                <option value="online">Online</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Schedule</label>
-                        <input type="text" name="schedule" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent" placeholder="e.g., Monday & Wednesday 10:00-12:00">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Class Days</label>
+                            <div class="grid grid-cols-2 gap-2 text-sm">
+                                <label class="inline-flex items-center"><input type="checkbox" value="Monday" class="add_day form-checkbox text-[#10B981] rounded border-gray-300" onchange="updateScheduleString('add')"> <span class="ml-2">Monday</span></label>
+                                <label class="inline-flex items-center"><input type="checkbox" value="Tuesday" class="add_day form-checkbox text-[#10B981] rounded border-gray-300" onchange="updateScheduleString('add')"> <span class="ml-2">Tuesday</span></label>
+                                <label class="inline-flex items-center"><input type="checkbox" value="Wednesday" class="add_day form-checkbox text-[#10B981] rounded border-gray-300" onchange="updateScheduleString('add')"> <span class="ml-2">Wednesday</span></label>
+                                <label class="inline-flex items-center"><input type="checkbox" value="Thursday" class="add_day form-checkbox text-[#10B981] rounded border-gray-300" onchange="updateScheduleString('add')"> <span class="ml-2">Thursday</span></label>
+                                <label class="inline-flex items-center"><input type="checkbox" value="Friday" class="add_day form-checkbox text-[#10B981] rounded border-gray-300" onchange="updateScheduleString('add')"> <span class="ml-2">Friday</span></label>
+                                <label class="inline-flex items-center"><input type="checkbox" value="Saturday" class="add_day form-checkbox text-[#10B981] rounded border-gray-300" onchange="updateScheduleString('add')"> <span class="ml-2">Saturday</span></label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Class Time</label>
+                            <select id="add_time" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent" onchange="updateScheduleString('add')">
+                                <option value="">Select Time</option>
+                                <option value="09:00-11:00">09:00 - 11:00 (Morning)</option>
+                                <option value="14:00-16:00">14:00 - 16:00 (Afternoon)</option>
+                            </select>
+                            <input type="hidden" name="schedule" id="add_schedule" required>
+                            <p class="text-xs text-gray-500 mt-2">Result: <span id="add_schedule_preview" class="font-semibold text-gray-800"></span></p>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -259,7 +296,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Course</label>
-                            <select name="course_id" id="edit_course_id" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent">
+                            <select name="course_id" id="edit_course_id" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent" onchange="updateClassNames('edit')">
                                 <option value="">Select Course</option>
                                 @foreach($courses as $course)
                                     <option value="{{ $course->id }}">{{ $course->name }}</option>
@@ -277,14 +314,45 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Class Name</label>
-                        <input type="text" name="name" id="edit_name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Class Name</label>
+                            <select name="name" id="edit_name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent">
+                                <option value="">Select Course First</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Learning Method</label>
+                            <select name="learning_method" id="edit_learning_method" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent">
+                                <option value="">Select Method</option>
+                                <option value="offline">Offline</option>
+                                <option value="online">Online</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Schedule</label>
-                        <input type="text" name="schedule" id="edit_schedule" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Class Days</label>
+                            <div class="grid grid-cols-2 gap-2 text-sm">
+                                <label class="inline-flex items-center"><input type="checkbox" value="Monday" class="edit_day form-checkbox text-[#10B981] rounded border-gray-300" onchange="updateScheduleString('edit')"> <span class="ml-2">Monday</span></label>
+                                <label class="inline-flex items-center"><input type="checkbox" value="Tuesday" class="edit_day form-checkbox text-[#10B981] rounded border-gray-300" onchange="updateScheduleString('edit')"> <span class="ml-2">Tuesday</span></label>
+                                <label class="inline-flex items-center"><input type="checkbox" value="Wednesday" class="edit_day form-checkbox text-[#10B981] rounded border-gray-300" onchange="updateScheduleString('edit')"> <span class="ml-2">Wednesday</span></label>
+                                <label class="inline-flex items-center"><input type="checkbox" value="Thursday" class="edit_day form-checkbox text-[#10B981] rounded border-gray-300" onchange="updateScheduleString('edit')"> <span class="ml-2">Thursday</span></label>
+                                <label class="inline-flex items-center"><input type="checkbox" value="Friday" class="edit_day form-checkbox text-[#10B981] rounded border-gray-300" onchange="updateScheduleString('edit')"> <span class="ml-2">Friday</span></label>
+                                <label class="inline-flex items-center"><input type="checkbox" value="Saturday" class="edit_day form-checkbox text-[#10B981] rounded border-gray-300" onchange="updateScheduleString('edit')"> <span class="ml-2">Saturday</span></label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Class Time</label>
+                            <select id="edit_time" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#10B981] focus:border-transparent" onchange="updateScheduleString('edit')">
+                                <option value="">Select Time</option>
+                                <option value="09:00-11:00">09:00 - 11:00 (Morning)</option>
+                                <option value="14:00-16:00">14:00 - 16:00 (Afternoon)</option>
+                            </select>
+                            <input type="hidden" name="schedule" id="edit_schedule" required>
+                            <p class="text-xs text-gray-500 mt-2">Result: <span id="edit_schedule_preview" class="font-semibold text-gray-800"></span></p>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -392,18 +460,42 @@
     maxStudents,
     startDate,
     endDate,
-    status
+    status,
+    learningMethod
 ) {
 
     document.getElementById('edit_class_id').value = id;
 
     document.getElementById('edit_course_id').value = courseId;
+    window.currentEditName = name;
+    updateClassNames('edit');
 
     document.getElementById('edit_teacher_id').value = teacherId;
 
-    document.getElementById('edit_name').value = name;
-
     document.getElementById('edit_schedule').value = schedule;
+    
+    // Parse the schedule string to populate days and time
+    document.querySelectorAll('.edit_day').forEach(cb => cb.checked = false);
+    document.getElementById('edit_time').value = '';
+    document.getElementById('edit_schedule_preview').innerText = schedule || '';
+    
+    if (schedule) {
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        days.forEach(day => {
+            if (schedule.includes(day)) {
+                const cb = document.querySelector(`.edit_day[value="${day}"]`);
+                if (cb) cb.checked = true;
+            }
+        });
+        
+        if (schedule.includes('09:00-11:00')) {
+            document.getElementById('edit_time').value = '09:00-11:00';
+        } else if (schedule.includes('14:00-16:00')) {
+            document.getElementById('edit_time').value = '14:00-16:00';
+        }
+    }
+
+    document.getElementById('edit_learning_method').value = learningMethod;
 
     document.getElementById('edit_max_students').value = maxStudents;
 
@@ -418,6 +510,47 @@
             detail: 'edit-class'
         })
     );
+}
+
+function updateClassNames(mode) {
+    const courseSelect = document.getElementById(mode + '_course_id');
+    const nameSelect = document.getElementById(mode + '_name');
+    const courseName = courseSelect.options[courseSelect.selectedIndex]?.text || '';
+    
+    nameSelect.innerHTML = '<option value="">Select Class Name</option>';
+    
+    if (courseSelect.value) {
+        const plans = ['Plan - Morning Class', 'Plan - Afternoon Class'];
+        plans.forEach(plan => {
+            const optionValue = `${courseName} ${plan}`;
+            nameSelect.innerHTML += `<option value="${optionValue}">${optionValue}</option>`;
+        });
+        
+        if (mode === 'edit' && window.currentEditName) {
+            let exists = Array.from(nameSelect.options).some(opt => opt.value === window.currentEditName);
+            if (!exists) {
+                nameSelect.innerHTML += `<option value="${window.currentEditName}">${window.currentEditName}</option>`;
+            }
+            nameSelect.value = window.currentEditName;
+        }
+    }
+}
+
+function updateScheduleString(mode) {
+    const checkboxes = document.querySelectorAll(`.${mode}_day:checked`);
+    const days = Array.from(checkboxes).map(cb => cb.value);
+    const time = document.getElementById(`${mode}_time`).value;
+    
+    let scheduleString = '';
+    if (days.length > 0) {
+        scheduleString += days.join(' & ');
+    }
+    if (time) {
+        scheduleString += (scheduleString ? ' ' : '') + time;
+    }
+    
+    document.getElementById(`${mode}_schedule`).value = scheduleString;
+    document.getElementById(`${mode}_schedule_preview`).innerText = scheduleString || '-';
 }
 
         function openDeleteClass(id, name) {

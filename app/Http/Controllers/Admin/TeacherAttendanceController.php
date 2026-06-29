@@ -83,13 +83,24 @@ class TeacherAttendanceController extends Controller
             'total_present' => AttendanceSession::where('teacher_attendance_status', 'Present')->count(),
             'total_absent' => AttendanceSession::where('teacher_attendance_status', 'Absent')->count(),
         ];
+        
+        $today = now()->format('l');
+        $todaySchedules = $settings->filter(function ($setting) use ($today) {
+            return in_array($today, $setting->days ?? []);
+        });
+        
+        $todayAttendances = AttendanceSession::whereDate('session_date', now()->toDateString())
+            ->whereNotNull('teacher_time_in')
+            ->get();
 
         return view('admin.teacher-attendance.index', compact(
             'teachers',
             'classes',
             'settings',
             'attendances',
-            'stats'
+            'stats',
+            'todaySchedules',
+            'todayAttendances'
         ));
     }
 

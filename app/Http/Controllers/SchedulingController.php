@@ -23,6 +23,7 @@ class SchedulingController extends Controller
             'max_students' => 'required|integer|min:1|max:100',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
+            'learning_method' => 'required|in:online,offline',
             'status' => 'required|in:active,inactive,completed',
         ]);
 
@@ -68,6 +69,7 @@ class SchedulingController extends Controller
             'max_students' => 'required|integer|min:1|max:100',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
+            'learning_method' => 'required|in:online,offline',
             'status' => 'required|in:active,inactive,completed',
         ]);
 
