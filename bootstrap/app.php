@@ -11,6 +11,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Trust reverse proxy (master nginx) so Laravel generates https:// URLs
+        $middleware->trustProxies(at: '*');
+
         $middleware->alias([
             'admin' => \App\Http\Middleware\IsAdmin::class,
             'teacher' => \App\Http\Middleware\IsTeacher::class,

@@ -1,0 +1,30 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker files (not needed inside image)
+docker-compose*.yml
+.dockerignore
+
+# Dev files
+node_modules
+.env
+.env.*
+!.env.example
+
+# Design assets
+design/
+scratch/
+scratch.cjs
+
+# Tests
+tests/
+phpunit.xml
+
+# IDE
+.editorconfig
+*.md
+
+# Build cache
+.vite
